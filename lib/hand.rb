@@ -87,6 +87,14 @@ class Hand
     face_values.uniq.length == 2
   end
 
+  def four_of_a_kind?
+    cards.any? { |card| num_face_value_count(card) == 4 }
+  end
+
+  def straight_flush?
+    flush? && straight?
+  end
+
   def num_face_value_count(card)
     num_value = NUM_FACE_VALUES[card.face_value]
     selected_cards = num_face_values.select do |num_face_value|

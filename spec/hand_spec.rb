@@ -128,6 +128,44 @@ describe Hand do
 
   end
 
+  describe "#four_of_a_kind?" do
+    let(:card_1) { Card.new(:six, :spades) }
+    let(:card_2) { Card.new(:six, :clubs) }
+    let(:card_3) { Card.new(:six, :hearts) }
+    let(:card_4) { Card.new(:six, :diamonds) }
+    let(:card_5) { Card.new(:four, :hearts) }
+    let(:hand) { Hand.new([card_1, card_2, card_3, card_4, card_5]) }
+
+    it "returns true if hand contains four of a kind" do
+      expect(hand.four_of_a_kind?).to eq(true)
+    end
+
+    it "returns false if hand does not contain four of a kind" do
+      hand.cards[0] = Card.new(:ace, :spades)
+      expect(hand.four_of_a_kind?).to eq(false)
+    end
+
+  end
+
+  describe "#straight_flush?" do
+    let(:card_1) { Card.new(:six, :hearts) }
+    let(:card_2) { Card.new(:two, :hearts) }
+    let(:card_3) { Card.new(:three, :hearts) }
+    let(:card_4) { Card.new(:four, :hearts) }
+    let(:card_5) { Card.new(:five, :hearts) }
+    let(:hand) { Hand.new([card_1, card_2, card_3, card_4, card_5]) }
+
+    it "returns true if hand contains five cards of same suit and have sequential face values" do
+      expect(hand.straight_flush?).to eq(true)
+    end
+
+    it "returns false if hand does not contain five cards of same suit and do not have sequential face values" do
+      hand.cards[0] = Card.new(:ace, :spades)
+      expect(hand.straight_flush?).to eq(false)
+    end
+
+  end
+
 
   describe "#num_face_values" do
     let(:card_1) { Card.new(:ace, :hearts) }
