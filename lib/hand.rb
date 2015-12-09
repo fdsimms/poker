@@ -55,7 +55,19 @@ class Hand
   end
 
   def straight?
-    sorted_values = num_face_values.sorted
+    sorted_values = []
+    if num_face_values.include?(2)
+      num_face_values.each do |value|
+        if value == 14
+          sorted_values << 1
+        else
+          sorted_values << value
+        end
+      end
+    else
+      sorted_values = num_face_values
+    end
+    sorted_values.sort!
     (sorted_values.length - 1).times do |idx|
       value = sorted_values[idx]
       next_value = sorted_values[idx + 1]
@@ -63,6 +75,16 @@ class Hand
     end
 
     true
+  end
+
+  def flush?
+    suits = []
+    cards.each { |card| suits << card.suit }
+    suits.uniq.length == 1
+  end
+
+  def full_house?
+    face_values.uniq.length == 2
   end
 
   def num_face_value_count(card)

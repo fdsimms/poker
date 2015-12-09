@@ -78,9 +78,10 @@ describe Hand do
       expect(hand.straight?).to eq(true)
     end
 
-    # it "returns true if straight contains an ace" do
-    #   expect(hand.straight?).to eq(true)
-    # end
+    it "returns true if straight contains a low ace" do
+      hand.cards[0] = Card.new(:ace, :hearts)
+      expect(hand.straight?).to eq(true)
+    end
 
     it "returns false if hand does not contain five straight cards" do
       hand.cards[0] = Card.new(:five, :diamonds)
@@ -88,6 +89,45 @@ describe Hand do
     end
 
   end
+
+  describe "#flush?" do
+    let(:card_1) { Card.new(:six, :hearts) }
+    let(:card_2) { Card.new(:two, :hearts) }
+    let(:card_3) { Card.new(:three, :hearts) }
+    let(:card_4) { Card.new(:four, :hearts) }
+    let(:card_5) { Card.new(:five, :hearts) }
+    let(:hand) { Hand.new([card_1, card_2, card_3, card_4, card_5]) }
+
+    it "returns true if hand contains five cards of same suit" do
+      expect(hand.flush?).to eq(true)
+    end
+
+    it "returns false if hand does not contain five cards of same suit" do
+      hand.cards[0] = Card.new(:ace, :spades)
+      expect(hand.flush?).to eq(false)
+    end
+
+  end
+
+  describe "#full_house?" do
+    let(:card_1) { Card.new(:six, :spades) }
+    let(:card_2) { Card.new(:six, :clubs) }
+    let(:card_3) { Card.new(:six, :hearts) }
+    let(:card_4) { Card.new(:four, :clubs) }
+    let(:card_5) { Card.new(:four, :hearts) }
+    let(:hand) { Hand.new([card_1, card_2, card_3, card_4, card_5]) }
+
+    it "returns true if hand contains three of a kind and one pair" do
+      expect(hand.full_house?).to eq(true)
+    end
+
+    it "returns false if hand does not contain three of a kind and one pair" do
+      hand.cards[0] = Card.new(:ace, :spades)
+      expect(hand.full_house?).to eq(false)
+    end
+
+  end
+
 
   describe "#num_face_values" do
     let(:card_1) { Card.new(:ace, :hearts) }
