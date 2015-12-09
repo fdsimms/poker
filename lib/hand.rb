@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Hand
 
   WINNING_HANDS = {
@@ -11,6 +13,24 @@ class Hand
     one_pair: 2,
     high_card: 1
   }
+
+  NUM_FACE_VALUES = {
+    ace: 14,
+    king: 13,
+    queen: 12,
+    jack: 11,
+    ten: 10,
+    nine: 9,
+    eight: 8,
+    seven: 7,
+    six: 6,
+    five: 5,
+    four: 4,
+    three: 3,
+    two: 2,
+    low_ace: 1
+  }
+
 
   attr_reader :cards
 
@@ -31,15 +51,28 @@ class Hand
   end
 
   def three_of_a_kind?
-    cards.any? { |card| face_value_count(card) == 3 }
+    cards.any? { |card| num_face_value_count(card) == 3 }
   end
 
-  def face_value_count(card)
-    value = card.face_value
-    face_values.select { |face_value| value == face_value }.length
+  def straight?
+    sorted_values = num_face_values.sorted
+    (sorted_values.length - 1).times do |idx|
+      value = sorted_values[idx]
+      next_value = sorted_values[idx + 1]
+      return false unless (value + 1) == next_value
+    end
+
+    true
   end
 
-  private
+  def num_face_value_count(card)
+    num_value = NUM_FACE_VALUES[card.face_value]
+    selected_cards = num_face_values.select do |num_face_value|
+      num_value == num_face_value
+    end
+    selected_cards.length
+  end
+
   def face_values
     face_values = []
     cards.each do |card|
@@ -47,6 +80,15 @@ class Hand
     end
 
     face_values
+  end
+
+  def num_face_values
+    num_face_values = []
+    cards.each do |card|
+      num_face_values << NUM_FACE_VALUES[card.face_value]
+    end
+
+    num_face_values
   end
 
 end
